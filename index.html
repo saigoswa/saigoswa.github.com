@@ -1,23 +1,599 @@
-<html>
+<html lang="en">
 <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Your Name — Professional Profile</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Mono&display=swap" rel="stylesheet">
+
+  <!-- Simple reset + styles -->
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --muted:#98a0b3;
+      --accent:#7c5cff;
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.02);
+      --text:#e6eef8;
+      --success:#22c55e;
+    }
+    [data-theme="light"]{
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --accent:#6b46ff;
+      --glass: rgba(15,23,42,0.03);
+      --glass-2: rgba(15,23,42,0.02);
+      --text:#0b1220;
+      --success:#059669;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:linear-gradient(180deg,var(--bg), #061025 120%);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:32px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+    }
+
+    .wrap{
+      width:100%;
+      max-width:1100px;
+      display:grid;
+      grid-template-columns: 340px 1fr;
+      gap:28px;
+      align-items:start;
+    }
+
+    /* left column */
+    .panel{
+      background: linear-gradient(180deg,var(--card), rgba(255,255,255,0.02));
+      border-radius:14px;
+      padding:20px;
+      box-shadow: 0 6px 30px rgba(2,6,23,0.6);
+      position:sticky;
+      top:28px;
+    }
+
+    .avatar{
+      width:100%;
+      display:flex;
+      gap:14px;
+      align-items:center;
+    }
+    .avatar img{
+      width:72px;
+      height:72px;
+      border-radius:12px;
+      object-fit:cover;
+      border:2px solid rgba(255,255,255,0.06);
+      background:linear-gradient(135deg,var(--accent), #4cdfc8);
+    }
+    .name{
+      display:flex;
+      flex-direction:column;
+    }
+    .name .title{font-weight:700; font-size:18px}
+    .name .role{color:var(--muted); font-size:13px; margin-top:6px}
+
+    .meta{margin-top:18px; font-size:14px; color:var(--muted)}
+    .meta a{color:var(--text); text-decoration:none; font-weight:600}
+
+    .skills{
+      margin-top:18px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .chip{
+      background:var(--glass);
+      padding:7px 10px;
+      border-radius:10px;
+      font-size:13px;
+      color:var(--text);
+      border:1px solid var(--glass-2);
+    }
+
+    .left-footer{margin-top:18px; display:flex; gap:8px; align-items:center}
+    .btn{
+      background:linear-gradient(90deg,var(--accent), #4c8bff);
+      color:white;
+      padding:9px 12px;
+      border-radius:10px;
+      border:none;
+      cursor:pointer;
+      font-weight:700;
+      box-shadow: 0 8px 18px rgba(108,72,255,0.12);
+    }
+    .btn.ghost{
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.06);
+      color:var(--text);
+      box-shadow:none;
+    }
+
+    /* right column (main) */
+    main{
+      display:flex;
+      flex-direction:column;
+      gap:22px;
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border-radius:14px;
+      padding:20px;
+      border:1px solid rgba(255,255,255,0.02);
+    }
+
+    .hero{
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      align-items:center;
+    }
+    .hero .intro{
+      max-width:760px;
+    }
+    .intro h1{
+      margin:0;
+      font-size:24px;
+      letter-spacing:-0.2px;
+    }
+    .intro p{color:var(--muted); margin-top:8px}
+
+    .links{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap}
+    .link{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      background:var(--glass);
+      padding:8px 10px;
+      border-radius:10px;
+      font-weight:600;
+      color:var(--text);
+      text-decoration:none;
+      border:1px solid var(--glass-2);
+      font-size:14px;
+    }
+
+    /* Experience timeline */
+    .timeline{display:flex; flex-direction:column; gap:12px}
+    .timeline-item{
+      display:grid;
+      grid-template-columns:110px 1fr;
+      gap:12px;
+      align-items:start;
+      padding:12px;
+      border-radius:10px;
+      transition:transform .18s ease, box-shadow .18s ease;
+      cursor:default;
+    }
+    .timeline-item:hover{transform:translateY(-6px); box-shadow:0 10px 30px rgba(2,6,23,0.45)}
+    .timeline-time{color:var(--muted); font-size:13px}
+    .timeline-content h4{margin:0; font-size:15px}
+    .timeline-content p{color:var(--muted); margin:6px 0 0 0; font-size:14px}
+
+    /* Articles */
+    .articles{display:flex; flex-direction:column; gap:12px}
+    .article{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:12px;
+      border-radius:10px;
+      background:var(--glass);
+      border:1px solid var(--glass-2);
+    }
+    .article .meta{color:var(--muted); font-size:13px}
+    .article a{color:var(--text); text-decoration:none; font-weight:700}
+
+    /* Resume */
+    #resume{
+      background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      border-radius:12px;
+      padding:18px;
+      font-size:15px;
+    }
+    .resume-head{display:flex; justify-content:space-between; gap:16px; align-items:center}
+    .resume-head h2{margin:0}
+    .section{margin-top:12px}
+    .section h3{margin:0 0 8px 0; font-size:14px}
+    .job{margin-bottom:10px}
+    .job h4{margin:0; font-size:14px}
+    .job .muted{color:var(--muted); font-size:13px; margin-top:6px}
+    .skill-grid{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px}
+
+    /* controls row */
+    .controls{display:flex; gap:8px; align-items:center}
+    .toggle{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 8px; border-radius:10px; background:var(--glass);
+      border:1px solid var(--glass-2); cursor:pointer;
+    }
+
+    footer{opacity:0.85; color:var(--muted); font-size:13px; margin-top:8px; text-align:center}
+
+    /* responsive */
+    @media (max-width:980px){
+      .wrap{grid-template-columns: 1fr; padding:0 8px}
+      .panel{position:relative; top:0;}
+      .hero{flex-direction:column; align-items:flex-start}
+    }
+  </style>
 
 </head>
-<body>
-<h1>Myself: Saikat</h1>
-<h2>Saikat Goswami</h2>
-<br>
-<br>
-<br>
-<h2>Professional Profile</h2>
-<br>
-10+ years of experience in server-side Java, J2EE. Study on Spring (Spring MVC, Spring Data, Swagger/Open API), Spring Boot, Microservices, MySQL, Linux.
+<body data-theme="dark">
+  <div class="wrap">
+    <!-- LEFT PANEL -->
+    <aside class="panel" aria-label="profile">
+      <div class="avatar">
+        <img id="profilePhoto" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="Your photo">
+        <div class="name">
+          <div class="title" id="fullName">Your Name</div>
+          <div class="role" id="role">Senior Frontend Engineer • JS & UX</div>
+        </div>
+      </div>
 
+      <div class="meta">
+        <div style="margin-top:12px">📍 <span id="location">Bengaluru, India</span></div>
+        <div style="margin-top:8px">✉️ <a id="emailLink" href="mailto:hello@example.com">hello@example.com</a></div>
+        <div style="margin-top:8px">🔗 <a id="websiteLink" href="https://your-website.example" target="_blank" rel="noreferrer">your-website.example</a></div>
+      </div>
 
+      <div class="skills" aria-hidden="false" style="margin-top:14px">
+        <span class="chip">JavaScript</span>
+        <span class="chip">React</span>
+        <span class="chip">TypeScript</span>
+        <span class="chip">HTML & CSS</span>
+        <span class="chip">Node.js</span>
+        <span class="chip">Accessibility</span>
+      </div>
 
+      <div class="left-footer">
+        <button class="btn" id="downloadResumeBtn">📄 Download Resume (PDF)</button>
+        <button class="btn ghost" id="themeToggle">🌙 Theme</button>
+      </div>
 
+      <div style="margin-top:18px; font-size:13px; color:var(--muted)">
+        Quick links
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <a class="chip" href="#experience">Experience</a>
+          <a class="chip" href="#articles">Articles</a>
+          <a class="chip" href="#resume">Resume</a>
+        </div>
+      </div>
+    </aside>
 
+    <!-- RIGHT / MAIN -->
+    <main>
+      <!-- HERO -->
+      <section class="card hero">
+        <div class="intro">
+          <h1 id="headline">Hi — I'm <span style="color:var(--accent)">Your Name</span>. I build delightful web apps.</h1>
+          <p id="summary">I’m a senior web engineer specializing in performant, accessible UI and developer tooling. I love shipping incremental features, mentoring engineers, and writing about technical topics.</p>
+
+          <div class="links">
+            <a class="link" href="https://github.com/placeholder" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="link" href="https://linkedin.com/in/placeholder" target="_blank" rel="noreferrer">LinkedIn</a>
+            <a class="link" href="https://medium.com/@placeholder" target="_blank" rel="noreferrer">Articles</a>
+          </div>
+        </div>
+
+        <div style="min-width:180px; display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
+          <div style="font-size:13px; color:var(--muted)">Open to: Senior roles • Contract • Speaking</div>
+          <div style="display:flex; gap:8px">
+            <a class="link" href="mailto:hello@example.com">Contact</a>
+            <a class="link" href="#resume" id="viewResumeBtn">View Resume</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- EXPERIENCE -->
+      <section id="experience" class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h2 style="margin:0">Experience</h2>
+          <div style="color:var(--muted); font-size:13px">Timeline of selected roles</div>
+        </div>
+
+        <div class="timeline" style="margin-top:14px">
+          <div class="timeline-item" aria-label="Senior frontend engineer at Starlight">
+            <div class="timeline-time">2022 — Present</div>
+            <div class="timeline-content">
+              <h4>Senior Frontend Engineer — Starlight Inc.</h4>
+              <div class="muted">Built the company design system and improved bundle performance by 45%.</div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-time">2019 — 2022</div>
+            <div class="timeline-content">
+              <h4>Frontend Engineer — Nimbus Labs</h4>
+              <div class="muted">Led UI for customer analytics dashboard. Introduced testing and accessibility practices.</div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-time">2016 — 2019</div>
+            <div class="timeline-content">
+              <h4>Software Engineer — Freelance / Contracts</h4>
+              <div class="muted">Various client projects: e-commerce, progressive web apps, conversion optimization.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ARTICLES -->
+      <section id="articles" class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h2 style="margin:0">Technical articles & writing</h2>
+          <div style="color:var(--muted); font-size:13px">Selected pieces</div>
+        </div>
+
+        <div class="articles" style="margin-top:12px">
+          <div class="article">
+            <div>
+              <a href="https://blog.example.com/accessible-react-patterns" target="_blank" rel="noreferrer">Accessible React patterns</a>
+              <div class="meta">Medium • Jan 2024</div>
+            </div>
+            <a class="link" href="https://blog.example.com/accessible-react-patterns" target="_blank" rel="noreferrer">Read →</a>
+          </div>
+
+          <div class="article">
+            <div>
+              <a href="https://dev.to/example/zero-cost-perf" target="_blank" rel="noreferrer">Zero-cost performance wins</a>
+              <div class="meta">Dev.to • Sep 2023</div>
+            </div>
+            <a class="link" href="https://dev.to/example/zero-cost-perf" target="_blank" rel="noreferrer">Read →</a>
+          </div>
+
+          <div class="article">
+            <div>
+              <a href="https://your-website.example/posts/how-i-organize-my-front-end" target="_blank" rel="noreferrer">How I organize frontend projects</a>
+              <div class="meta">Personal blog • May 2022</div>
+            </div>
+            <a class="link" href="https://your-website.example/posts/how-i-organize-my-front-end" target="_blank" rel="noreferrer">Read →</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESUME -->
+      <section id="resume" class="card">
+        <div class="resume-head">
+          <h2>Resume</h2>
+          <div class="controls">
+            <div class="toggle" id="printHint">Printable friendly • PDF-ready</div>
+            <button class="btn ghost" id="downloadInline">Download (.md)</button>
+          </div>
+        </div>
+
+        <div id="resumeContent" style="margin-top:12px; background:transparent;">
+          <!-- INLINE RESUME: edit this; html2pdf will capture this node -->
+          <div id="resume" role="region" aria-label="Resume">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px">
+              <div>
+                <h3 style="margin:0">Your Name</h3>
+                <div style="color:var(--muted)">Senior Frontend Engineer</div>
+                <div style="margin-top:8px; color:var(--muted)">hello@example.com • Bengaluru, India • +91 9XXXXXXXX</div>
+              </div>
+              <div style="text-align:right; color:var(--muted); font-size:13px">
+                <div><strong>Open to</strong></div>
+                <div>Full-time, Contract, Remote</div>
+              </div>
+            </div>
+
+            <div class="section">
+              <h3>Summary</h3>
+              <div class="muted">Practical frontend engineer with 8+ years building performant, accessible web apps. Proven track record improving load time, implementing design systems, and mentoring teams.</div>
+            </div>
+
+            <div class="section">
+              <h3>Experience</h3>
+
+              <div class="job">
+                <h4>Senior Frontend Engineer — Starlight Inc.</h4>
+                <div class="muted">2022 — Present • Bengaluru, India</div>
+                <ul style="margin:8px 0 0 18px; color:var(--muted)">
+                  <li>Built and maintained a component design system used across 5 product teams.</li>
+                  <li>Reduced initial JS bundle by 45% via code-splitting, tree-shaking, and critical CSS inlining.</li>
+                  <li>Mentored 6 engineers and led code reviews and hiring interview loops.</li>
+                </ul>
+              </div>
+
+              <div class="job">
+                <h4>Frontend Engineer — Nimbus Labs</h4>
+                <div class="muted">2019 — 2022 • Remote</div>
+                <ul style="margin:8px 0 0 18px; color:var(--muted)">
+                  <li>Led UI rebuild of analytics platform; improved retention metrics by simplifying flows.</li>
+                  <li>Introduced end-to-end testing and accessibility audits.</li>
+                </ul>
+              </div>
+
+              <div class="job">
+                <h4>Software Engineer — Freelance</h4>
+                <div class="muted">2016 — 2019</div>
+                <ul style="margin:8px 0 0 18px; color:var(--muted)">
+                  <li>Delivered e-commerce sites, PWAs and performance tuning for early-stage startups.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="section">
+              <h3>Education</h3>
+              <div class="muted">B.Tech, Computer Science — Example University (2012 — 2016)</div>
+            </div>
+
+            <div class="section">
+              <h3>Skills</h3>
+              <div class="skill-grid">
+                <span class="chip">JavaScript</span>
+                <span class="chip">TypeScript</span>
+                <span class="chip">React</span>
+                <span class="chip">CSS Architecture</span>
+                <span class="chip">Node.js</span>
+                <span class="chip">Testing (Jest, RTL)</span>
+                <span class="chip">Performance</span>
+                <span class="chip">Accessibility (a11y)</span>
+              </div>
+            </div>
+
+            <div class="section">
+              <h3>Selected Projects</h3>
+              <div style="color:var(--muted)">
+                <strong>Design System</strong> — Built a scalable component library with tokens, docs, and Figma components.<br>
+                <strong>Realtime Dashboard</strong> — Streamed updates with websockets and optimized rendering for large datasets.
+              </div>
+            </div>
+
+            <div class="section">
+              <h3>Public Speaking & Writing</h3>
+              <div style="color:var(--muted)">
+                Speaker at local meetups; write about accessibility and performance. See selected articles above.
+              </div>
+            </div>
+          </div>
+          <!-- end resume -->
+        </div>
+
+      </section>
+
+      <footer>
+        🔨🤖🔧 Built with a single HTML file — edit content directly. Replace placeholder images & links. © <span id="year"></span>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- html2pdf (for client-side PDF generation) -->
+  <script src="https://unpkg.com/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+
+  <script>
+    // ---------- Basic personalization + utilities ----------
+    (function(){
+      const year = new Date().getFullYear();
+      document.getElementById('year').textContent = year;
+
+      // sample dynamic replacements (change as needed)
+      document.getElementById('fullName').textContent = 'Your Name';
+      document.getElementById('headline').innerHTML = "Hi — I'm <span style='color:var(--accent)'>Your Name</span>. I build delightful web apps.";
+      document.getElementById('summary').textContent = "I’m a senior web engineer specializing in performant, accessible UI and developer tooling. I love shipping incremental features, mentoring engineers, and writing about technical topics.";
+      // email & website links (change them)
+      const email = 'hello@example.com';
+      document.getElementById('emailLink').href = 'mailto:' + email;
+      document.getElementById('emailLink').textContent = email;
+      document.getElementById('websiteLink').href = 'https://your-website.example';
+      document.getElementById('websiteLink').textContent = 'your-website.example';
+
+      // Theme toggle
+      const themeBtn = document.getElementById('themeToggle');
+      themeBtn.addEventListener('click', () => {
+        const root = document.body;
+        const current = root.getAttribute('data-theme') || 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        themeBtn.textContent = next === 'dark' ? '🌙 Theme' : '☀️ Theme';
+      });
+
+      // open resume anchor scroll
+      document.getElementById('viewResumeBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('resume').scrollIntoView({behavior:'smooth'});
+      });
+
+      // ---------- PDF Download (html2pdf) ----------
+      // Handler to convert #resume node to a nicely formatted PDF and download
+      const downloadResumeBtn = document.getElementById('downloadResumeBtn');
+      downloadResumeBtn.addEventListener('click', () => generatePDF());
+
+      // Another button to download markdown (simple)
+      document.getElementById('downloadInline').addEventListener('click', downloadMarkdown);
+
+      function generatePDF(){
+        const element = document.getElementById('resume');
+        const opt = {
+          margin:       [12, 12, 12, 12],
+          filename:     'YourName-Resume.pdf',
+          image:        { type: 'jpeg', quality: 0.98 },
+          html2canvas:  { scale: 2, useCORS: true },
+          jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['css', 'legacy'] }
+        };
+
+        // show small feedback while generating
+        const originalText = downloadResumeBtn.textContent;
+        downloadResumeBtn.textContent = 'Generating PDF…';
+        downloadResumeBtn.disabled = true;
+
+        // generate
+        html2pdf().set(opt).from(element).save()
+          .then(() => {
+            downloadResumeBtn.disabled = false;
+            downloadResumeBtn.textContent = originalText;
+          })
+          .catch(err => {
+            console.error('PDF generation error', err);
+            downloadResumeBtn.disabled = false;
+            downloadResumeBtn.textContent = originalText;
+            alert('Could not generate PDF in this browser. Try Chrome or Firefox.');
+          });
+      }
+
+      // Download a small markdown version of the resume (client-side)
+      function downloadMarkdown(){
+        const md = [
+          '# Your Name',
+          'Senior Frontend Engineer',
+          '',
+          'hello@example.com • Bengaluru, India',
+          '',
+          '## Summary',
+          'Practical frontend engineer with 8+ years building performant, accessible web apps.',
+          '',
+          '## Experience',
+          '- **Senior Frontend Engineer — Starlight Inc.** (2022 — Present)  \n  - Built the company design system; reduced bundle size by 45%.',
+          '- **Frontend Engineer — Nimbus Labs** (2019 — 2022)  \n  - Led UI rebuild of analytics platform.',
+          '',
+          '## Skills',
+          '- JavaScript, TypeScript, React, Node.js, Accessibility, Performance',
+          '',
+          '## Contact',
+          '- hello@example.com'
+        ].join('\\n');
+
+        const blob = new Blob([md], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'YourName-Resume.md';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      // small accessibility: focus styles
+      document.addEventListener('keyup', e => {
+        if(e.key === 'Tab') document.documentElement.classList.add('show-focus');
+      });
+
+      // Safety: ensure profile image has alt text
+      const img = document.getElementById('profilePhoto');
+      if(!img.alt || img.alt.trim()==='') img.alt = 'Profile photo';
+
+      // Pro tip displayed via console
+      console.log('%cProfile site loaded — edit the HTML to personalize (images, links, content).', 'color: #7c5cff; font-weight:700');
+
+    })();
+  </script>
 </body>
-
-
-
 </html>
