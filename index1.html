@@ -500,9 +500,9 @@
       themeBtn.addEventListener('click', () => {
         const root = document.body;
         const current = root.getAttribute('data-theme') || 'dark';
-        const next = current === 'dark' ? 'light' : 'dark';
-        root.setAttribute('data-theme', next);
-        themeBtn.textContent = next === 'dark' ? '🌙 Theme' : '☀️ Theme';
+       // const next = current === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', 'light');
+        //themeBtn.textContent = next === 'dark' ? '🌙 Theme' : '☀️ Theme';
       });
 
       // open resume anchor scroll
