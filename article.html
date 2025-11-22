@@ -233,4 +233,340 @@
     .btn:hover{ transform:translateY(-3px); color:#fff; border-color:rgba(255,255,255,0.08) }
 
     .btn.primary{
-      background:li
+      background:linear-gradient(90deg,var(--accent-1),var(--accent-2));
+      color:#03101a;
+      border:none;
+      font-weight:700;
+    }
+
+    /* neon outline on focus for accessibility */
+    a:focus, button:focus, input:focus{
+      outline:3px solid rgba(139,233,253,0.12);
+      outline-offset:3px;
+    }
+
+    /* Empty state */
+    .empty{
+      text-align:center;
+      margin-top:40px;
+      color:var(--muted);
+      padding:36px;
+      border-radius:12px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      border:1px dashed rgba(255,255,255,0.02);
+    }
+
+    /* header subtitle animation */
+    .subtitle .dot{
+      display:inline-block;
+      width:8px;height:8px;border-radius:50%;
+      margin-left:10px;
+      background:linear-gradient(90deg,var(--accent-1),var(--accent-2));
+      box-shadow:0 0 18px rgba(139,233,253,0.14), 0 0 30px rgba(255,121,198,0.06);
+      transform:translateY(0);
+      animation:float 2.6s ease-in-out infinite;
+    }
+
+    @keyframes float{
+      0%{transform:translateY(0)}
+      50%{transform:translateY(-6px)}
+      100%{transform:translateY(0)}
+    }
+
+    /* responsive tweaks */
+    @media (max-width:560px){
+      header{flex-direction:column;align-items:flex-start;gap:12px}
+      .search input{width:100px}
+      .grid{grid-template-columns:repeat(1,1fr)}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">YA</div>
+        <div>
+          <h1>Your Articles</h1>
+          <div class="subtitle">A curated list of my writing <span class="dot" aria-hidden="true"></span></div>
+        </div>
+      </div>
+
+      <div class="controls" aria-hidden="false">
+        <div class="search" role="search" aria-label="Search articles">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <input id="q" placeholder="Search titles, tags..." aria-label="Search articles" />
+        </div>
+
+        <div class="taste" title="Quick filter">
+          <button class="toggle" id="filter-recent" aria-pressed="false">Recent</button>
+          <button class="toggle" id="filter-featured" aria-pressed="false">Featured</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div id="tagBar" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;"></div>
+
+      <div id="grid" class="grid" aria-live="polite"></div>
+
+      <div id="empty" class="empty" style="display:none;">
+        No articles found. Try clearing search or filters.
+      </div>
+    </main>
+  </div>
+
+  <script>
+    /* -----------------------------
+       Replace the items below with your real article data.
+       Fields: title, url, date (YYYY-MM-DD), tags (array), excerpt, featured (bool)
+       ----------------------------- */
+    const articles = [
+      {
+        title: "How I Built a Minimal Writing Workflow",
+        url: "https://example.com/minimal-writing-workflow",
+        date: "2025-10-02",
+        tags: ["writing","productivity"],
+        excerpt: "A concise, beautiful workflow for getting words out fast — templates, distractions rules, and tiny rituals.",
+        featured: true
+      },
+      {
+        title: "Designing for Contrast: A Dark-Mode Guide",
+        url: "https://example.com/dark-mode-guide",
+        date: "2025-06-18",
+        tags: ["design","accessibility"],
+        excerpt: "Tips for color, hierarchy, and readability when designing in a dark theme. Examples and quick-check heuristics.",
+        featured: false
+      },
+      {
+        title: "From Idea to First Draft in 90 Minutes",
+        url: "https://example.com/idea-to-first-draft",
+        date: "2024-12-08",
+        tags: ["writing","process"],
+        excerpt: "A practical sprint structure to turn small ideas into coherent drafts — worksheets and sprint checklist included.",
+        featured: false
+      },
+      {
+        title: "Trendy CSS Tricks (2025 Edition)",
+        url: "https://example.com/trendy-css-2025",
+        date: "2025-03-30",
+        tags: ["css","frontend"],
+        excerpt: "A curated set of small CSS patterns that look expensive: gradients, glass, micro-interactions and rhythm.",
+        featured: true
+      }
+    ];
+
+    /* -----------------------------
+       UI logic (NO external libs)
+       ----------------------------- */
+    const grid = document.getElementById('grid');
+    const q = document.getElementById('q');
+    const empty = document.getElementById('empty');
+    const tagBar = document.getElementById('tagBar');
+    const filterRecentBtn = document.getElementById('filter-recent');
+    const filterFeaturedBtn = document.getElementById('filter-featured');
+
+    let state = {
+      query: '',
+      tag: null,
+      recent: false,
+      featured: false
+    };
+
+    function formatDate(iso){
+      try{
+        const d = new Date(iso + "T00:00:00");
+        return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+      }catch(e){ return iso }
+    }
+
+    // Build distinct tags
+    const tags = Array.from(new Set(articles.flatMap(a => a.tags || []))).sort();
+    function renderTagBar(){
+      tagBar.innerHTML = '';
+      const allBtn = makeTagButton('All', null, state.tag === null);
+      tagBar.appendChild(allBtn);
+      tags.forEach(t => tagBar.appendChild(makeTagButton(t, t, state.tag === t)));
+    }
+
+    function makeTagButton(label, tagValue, active=false){
+      const btn = document.createElement('button');
+      btn.className = 'btn';
+      btn.style.padding = '6px 10px';
+      btn.innerText = label;
+      if(active){
+        btn.style.background = 'linear-gradient(90deg,var(--accent-1),var(--accent-2))';
+        btn.style.color = '#03101a';
+        btn.style.border = 'none';
+      }
+      btn.onclick = () => {
+        state.tag = tagValue;
+        render();
+      };
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      return btn;
+    }
+
+    // render cards
+    function render(){
+      const qLower = (state.query || '').trim().toLowerCase();
+      let list = articles.slice();
+
+      // filters
+      if(state.featured){
+        list = list.filter(a => a.featured);
+      }
+
+      if(state.tag){
+        list = list.filter(a => (a.tags || []).includes(state.tag));
+      }
+
+      if(qLower){
+        list = list.filter(a =>
+          a.title.toLowerCase().includes(qLower) ||
+          (a.excerpt||'').toLowerCase().includes(qLower) ||
+          (a.tags||[]).join(' ').toLowerCase().includes(qLower)
+        );
+      }
+
+      if(state.recent){
+        list.sort((a,b) => new Date(b.date) - new Date(a.date));
+      } else {
+        // default: featured first, then newest
+        list.sort((a,b) => {
+          if((b.featured|0) - (a.featured|0) !== 0) return (b.featured|0) - (a.featured|0);
+          return new Date(b.date) - new Date(a.date);
+        });
+      }
+
+      grid.innerHTML = '';
+
+      if(!list.length){
+        empty.style.display = 'block';
+        return;
+      } else {
+        empty.style.display = 'none';
+      }
+
+      list.forEach(a => {
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.tabIndex = 0;
+        card.setAttribute('role','article');
+        card.setAttribute('aria-label', a.title);
+
+        // click opens link
+        card.addEventListener('click', () => openLink(a.url));
+        card.addEventListener('keypress', (e) => {
+          if(e.key === 'Enter' || e.key === ' ') openLink(a.url);
+        });
+
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+
+        const tag = document.createElement('div');
+        tag.className = 'tag';
+        tag.innerText = (a.tags && a.tags[0]) || '—';
+        meta.appendChild(tag);
+
+        if(a.featured){
+          const star = document.createElement('div');
+          star.style.marginLeft = 'auto';
+          star.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 17.3L6.16 20l1.02-6L2 9.8l6.12-.9L12 3l3.88 5.9L22 9.8 16.82 14 17.84 20 12 17.3z" stroke="currentColor" stroke-width="0.6" fill="currentColor" /></svg>';
+          meta.appendChild(star);
+        }
+
+        const title = document.createElement('h3');
+        title.className = 'title';
+        title.innerText = a.title;
+
+        const excerpt = document.createElement('p');
+        excerpt.className = 'excerpt';
+        excerpt.innerText = a.excerpt || '';
+
+        const footer = document.createElement('div');
+        footer.className = 'card-footer';
+
+        const date = document.createElement('div');
+        date.className = 'date';
+        date.innerText = formatDate(a.date);
+
+        const actions = document.createElement('div');
+        actions.className = 'actions';
+
+        const openBtn = document.createElement('button');
+        openBtn.className = 'btn primary';
+        openBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3h7v7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 3L10 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 21H3V3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Read';
+        openBtn.onclick = (e) => { e.stopPropagation(); openLink(a.url); };
+
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'btn';
+        copyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 9H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="9" y="3" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Copy';
+        copyBtn.onclick = async (e) => {
+          e.stopPropagation();
+          try {
+            await navigator.clipboard.writeText(a.url);
+            copyBtn.innerHTML = 'Copied ✓';
+            setTimeout(()=> { copyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 9H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="9" y="3" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Copy'; }, 1500);
+          } catch(err) {
+            // fallback
+            window.prompt("Copy link:", a.url);
+          }
+        };
+
+        actions.appendChild(openBtn);
+        actions.appendChild(copyBtn);
+
+        footer.appendChild(date);
+        footer.appendChild(actions);
+
+        card.appendChild(meta);
+        card.appendChild(title);
+        card.appendChild(excerpt);
+        card.appendChild(footer);
+
+        grid.appendChild(card);
+      });
+    }
+
+    function openLink(url){
+      // safe fallback: open in new tab
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    // Wire inputs
+    q.addEventListener('input', (e) => {
+      state.query = e.target.value;
+      render();
+    });
+
+    filterRecentBtn.addEventListener('click', () => {
+      state.recent = !state.recent;
+      filterRecentBtn.setAttribute('aria-pressed', state.recent ? 'true' : 'false');
+      filterRecentBtn.style.background = state.recent ? 'linear-gradient(90deg,var(--accent-1),var(--accent-2))' : '';
+      filterRecentBtn.style.color = state.recent ? '#03101a' : '';
+      render();
+    });
+
+    filterFeaturedBtn.addEventListener('click', () => {
+      state.featured = !state.featured;
+      filterFeaturedBtn.setAttribute('aria-pressed', state.featured ? 'true' : 'false');
+      filterFeaturedBtn.style.background = state.featured ? 'linear-gradient(90deg,var(--accent-1),var(--accent-2))' : '';
+      filterFeaturedBtn.style.color = state.featured ? '#03101a' : '';
+      render();
+    });
+
+    // initial
+    renderTagBar();
+    render();
+
+    // keyboard accessibility: focus first card when searching result
+    q.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter'){
+        const first = grid.querySelector('.card');
+        if(first) first.focus();
+      }
+    });
+  </script>
+</body>
+</html>
