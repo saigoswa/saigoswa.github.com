@@ -307,7 +307,6 @@
         <div class="resume-head">
           <h2>Resume</h2>
           <div class="controls">
-            <div class="toggle" id="printHint">Printable friendly • PDF-ready</div>
             <button class="btn ghost" id="downloadInline">Download (.md)</button>
           </div>
         </div>
@@ -317,8 +316,8 @@
           <div id="resume" role="region" aria-label="Resume">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px">
               <div>
-                <h3 style="margin:0">Saikat Goswami</h3>
-                <div style="color:var(--muted)">Senior Java Engineer</div>
+                <h2 style="margin:0">Saikat Goswami</h2>
+                <div style="color:var(--muted)">Team Leader (Java)</div>
                 <div style="margin-top:8px; color:var(--muted)">goswamisaikat110@gmail.com • Kolkata, India • +91 9830176837</div>
               </div>
               <div style="text-align:right; color:var(--muted); font-size:13px">
@@ -328,7 +327,7 @@
             </div>
 
             <div class="section">
-              <h3>Summary</h3>
+              <h2>Summary</h2>
               <div class="muted">• 10 years of experience in Java/Java EE.</div>
               <div class="muted">• Knowledge of Hibernate, Spring (MVC, ORM, JDBC), Spring Boot (REST), Microservices, Docker, Git, SQL, Linux, JavaScript</div>
               <div class="muted">• Working knowledge of using Chat-GPT, Copilot, Google Gemini</div>
@@ -336,7 +335,7 @@
             
 
             <div class="section">
-              <h3>Experience</h3>
+              <h2>Experience</h2>
 
               <div class="job">
                 <h4>Senior Associate - Cognizant Technology Solutions</h4>
@@ -369,7 +368,7 @@
             </div>
 
             <div class="section">
-              <h3>Education</h3>
+              <h2>Education</h2>
               <div class="muted">M S, Industrial Engineering, Clemson University, SC, USA (1998 - 2000)</div>
               <div class="muted">B E, Jadavpur University, Kolkata, West Bengal, India  (1993 - 1997)</div>            </div>
             
@@ -431,6 +430,10 @@
 
       function generatePDF(){
         const element = document.getElementById('resume');
+
+        element.style.color = '#000';
+        element.querySelectorAll('*').forEach(el => el.style.color = '#000');
+        
         const opt = {
           margin:       [12, 12, 12, 12],
           filename:     'YourName-Resume.pdf',
