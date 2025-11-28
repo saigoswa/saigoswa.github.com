@@ -269,7 +269,7 @@
       </div>
 
       <div class="left-footer">
-        <button class="btn" id="viewResumeBtn">📄 Download Resume (PDF)</button>
+        <button class="btn" id="downloadResumeBtn">📄 Download Resume (PDF)</button>
       
       </div>
 
@@ -416,10 +416,10 @@
       //})();
 
       // open resume anchor scroll
-      document.getElementById('viewResumeBtn').addEventListener('click', (e) => {
-        e.preventDefault();
-        document.getElementById('resume').scrollIntoView({behavior:'smooth'});
-      });
+      //document.getElementById('viewResumeBtn').addEventListener('click', (e) => {
+      //  e.preventDefault();
+      //  document.getElementById('resume').scrollIntoView({behavior:'smooth'});
+      //});
 
       // ---------- PDF Download (html2pdf) ----------
       // Handler to convert #resume node to a nicely formatted PDF and download
