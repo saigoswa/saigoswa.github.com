@@ -312,7 +312,6 @@
         <div class="resume-head">
           <h2>Resume</h2>
           <div class="controls">
-            <button class="btn ghost" id="downloadInline">Download (.md)</button>
           </div>
         </div>
 
@@ -474,26 +473,7 @@
 
       // Download a small markdown version of the resume (client-side)
       function downloadMarkdown(){
-        const md = [
-          '# Your Name',
-          'Senior Frontend Engineer',
-          '',
-          'hello@example.com • Bengaluru, India',
-          '',
-          '## Summary',
-          'Practical frontend engineer with 8+ years building performant, accessible web apps.',
-          '',
-          '## Experience',
-          '- **Senior Frontend Engineer — Starlight Inc.** (2022 — Present)  \n  - Built the company design system; reduced bundle size by 45%.',
-          '- **Frontend Engineer — Nimbus Labs** (2019 — 2022)  \n  - Led UI rebuild of analytics platform.',
-          '',
-          '## Skills',
-          '- JavaScript, TypeScript, React, Node.js, Accessibility, Performance',
-          '',
-          '## Contact',
-          '- hello@example.com'
-        ].join('\\n');
-
+        
         const blob = new Blob([md], { type: 'text/markdown' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
