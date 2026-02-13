@@ -8,16 +8,14 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 
-  
   <!-- SEO Description -->
-  <meta name="description" content="A collection of high-quality Linux Miroservices Hibernate articles written by Saikat — covering Ubuntu, servers, NFS, DevOps, Podman, shell scripting, system administration, and troubleshooting." />
+  <meta name="description" content="A collection of high-quality Linux, Microservices, Hibernate, and System Analysis & Design articles written by Saikat — covering Ubuntu, servers, NFS, DevOps, Podman, shell scripting, system administration, and troubleshooting." />
 
-  <!-- SEO Keywords (optional but useful) -->
-  <meta name="keywords" content="Linux, Ubuntu, Podman, Docker, Shell scripting, Tutorials, Server setup" />
+  <!-- SEO Keywords -->
+  <meta name="keywords" content="Linux, Ubuntu, Podman, Docker, Shell scripting, Tutorials, Server setup, System Analysis and Design, Microservices, Hibernate" />
 
   <!-- Author -->
   <meta name="author" content="Saikat Goswami" />
-
 
   <style>
     :root{
@@ -33,7 +31,6 @@
       --max-width:1100px;
     }
 
-    /* Reset & base */
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -59,7 +56,7 @@
       gap:20px;
       align-items:center;
       justify-content:space-between;
-      margin-bottom:28px;
+      margin-bottom:22px;
     }
 
     .brand{
@@ -96,28 +93,38 @@
       margin-top:2px;
     }
 
-    .controls{
+    .rightPortion{
+      margin-left: 12px;
+      padding: 8px 14px;
+      background: #444;
+      border-radius: 6px;
       display:flex;
       align-items:center;
-      flex:1;      
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      max-width: 520px;
     }
 
-    .search{
-      margin-left: auto;
-      
+    .searchRow{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:10px;
+      background:rgba(0,0,0,0.25);
+      border:1px solid rgba(255,255,255,0.06);
+      flex: 1 1 240px;
     }
 
-    .search input{
+    .searchRow input{
       background:transparent;
       border:0;
       outline:0;
       color:inherit;
       font-size:14px;
-      width:160px;
-    }
-
-    .taste{      
-      margin-left: auto; 
+      width:100%;
+      min-width: 160px;
     }
 
     .toggle{
@@ -129,6 +136,38 @@
       color:var(--muted);
       border:1px solid rgba(255,255,255,0.03);
       cursor:pointer;
+      user-select:none;
+      white-space:nowrap;
+    }
+
+    /* Section header */
+    .section{
+      margin-top:22px;
+    }
+
+    .section-title{
+      display:flex;
+      align-items:flex-end;
+      gap:12px;
+      margin:0;
+      font-family:"Playfair Display", serif;
+      font-size:20px;
+      letter-spacing:-0.01em;
+    }
+
+    .section-title small{
+      color:var(--muted);
+      font-size:12px;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      font-weight:600;
+    }
+
+    hr.section-divider{
+      border:none;
+      height:1px;
+      background:linear-gradient(90deg, rgba(139,233,253,0.18), rgba(255,121,198,0.14), rgba(255,255,255,0.04));
+      margin:12px 0 18px 0;
+      opacity:0.9;
     }
 
     /* Grid */
@@ -136,7 +175,7 @@
       display:grid;
       grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
       gap:var(--card-gap);
-      margin-top:22px;
+      margin-top:0;
     }
 
     .card{
@@ -172,6 +211,7 @@
       gap:10px;
       align-items:center;
       margin-bottom:8px;
+      flex-wrap:wrap;
     }
 
     .tag{
@@ -231,6 +271,7 @@
       align-items:center;
       cursor:pointer;
       transition:transform .12s, background .12s, color .12s;
+      user-select:none;
     }
 
     .btn:hover{ transform:translateY(-3px); color:#fff; border-color:rgba(255,255,255,0.08) }
@@ -241,17 +282,13 @@
       border:none;
       font-weight:700;
     }
-    .rightPortion{
-      margin-left: 12px; /* spacing between the two divs */
-      padding: 8px 14px;
-      background: #444;
-      border-radius: 6px;
-    }
 
-    /* neon outline on focus for accessibility */
-    a:focus, button:focus, input:focus{
-      outline:3px solid rgba(139,233,253,0.12);
-      outline-offset:3px;
+    /* tag pills bar */
+    #tagBar{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin: 8px 0 16px 0;
     }
 
     /* Empty state */
@@ -282,75 +319,86 @@
       100%{transform:translateY(0)}
     }
 
-    /* responsive tweaks */
+    a:focus, button:focus, input:focus{
+      outline:3px solid rgba(139,233,253,0.12);
+      outline-offset:3px;
+    }
+
     @media (max-width:560px){
       header{flex-direction:column;align-items:flex-start;gap:12px}
-      .search input{width:100px}
+      .rightPortion{max-width:100%; width:100%;}
       .grid{grid-template-columns:repeat(1,1fr)}
     }
   </style>
 </head>
+
 <body>
   <div class="wrap">
-    <div style="margin-bottom:12px;"><a href="https://sai0goswa.github.io/index.html"><img src="../images/back_home.jpeg" width="50" height="50" alt="Home"></a><span style="color:white; margin-left:8px;">Home</span></div>
-    <hr> 
+    <div style="margin-bottom:12px;">
+      <a href="https://sai0goswa.github.io/index.html">
+        <img src="../images/back_home.jpeg" width="50" height="50" alt="Home">
+      </a>
+      <span style="color:white; margin-left:8px;">Home</span>
+    </div>
+
+    <hr class="section-divider">
+
     <header>
-      
       <div class="brand">
         <div class="logo">SG</div>
         <div>
           <h1>Saikat Goswami's Articles</h1>
           <div class="subtitle">A curated list of my writings <span class="dot" aria-hidden="true"></span><br></div>
-          <B>Hire Me</B> – Technical Writing & Developer Documentation
+          <b>Hire Me</b> – Technical Writing & Developer Documentation
         </div>
-        <div class="contactInfo"><a id="emailLink" href="mailto:goswamisaikat110@gmail.com">goswamisaikat110@gmail.com</a></div>
+        <div class="contactInfo">
+          <a id="emailLink" href="mailto:goswamisaikat110@gmail.com">goswamisaikat110@gmail.com</a>
+        </div>
       </div>
 
       <div class="rightPortion" aria-hidden="false">
-        <!--<div class="search" role="search" aria-label="Search articles" style="background-color: white;"> -->
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <input id="q" placeholder="Search titles, tags..." aria-label="Search articles" style="border-radius: 6px; height: 30px;" />          
-        <!-- </div>  -->
+        <div class="searchRow" role="search" aria-label="Search articles">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <input id="q" placeholder="Search titles, tags..." aria-label="Search articles" style="background-color:white" />
+        </div>
 
-        <!-- <div class="taste" title="Quick filter">  -->
-            
-          <button class="toggle" id="filter-recent" aria-pressed="false">Recent</button>
-          <button class="toggle" id="filter-featured" aria-pressed="false">Featured</button>
-       <!-- </div> -->
+        <button class="toggle" id="filter-recent" aria-pressed="false">Recent</button>
+        <button class="toggle" id="filter-featured" aria-pressed="false">Featured</button>
       </div>
-      
     </header>
-    
 
     <main>
-      <div id="tagBar" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;"></div>
+      <!-- Optional: quick jump pills -->
+       <div id="tagBar" aria-label="Jump to tag section"></div> 
 
-      <div id="grid" class="grid" aria-live="polite"></div>
+      <!-- Sections will be rendered here -->
+      <div id="sections"></div>
 
       <div id="empty" class="empty" style="display:none;">
         No articles found. Try clearing search or filters.
       </div>
     </main>
   </div>
-  
+
   <script>
-    /* -----------------------------
-       Replace the items below with your real article data.
-       Fields: title, url, date (YYYY-MM-DD), tags (array), excerpt, featured (bool)
-       ----------------------------- */
+    /*
+      Data model:
+      { title, url, date (YYYY-MM-DD), tags (array), excerpt, featured (bool) }
+    */
     const articles = [
       {
         title: "Introduction to Clustering and Load Balancing",
         url: "https://www.tutorialspoint.com/system_analysis_and_design/clustering_loadbalancing.htm",
-        date: "2025-10-02",
-        tags: ["system analysis and design","productivity"],
+        tags: ["system analysis and design"],
         excerpt: "Clustering and load balancing are essential for modern applications to ensure they are scalable, highly available, and perform well under varying loads.",
         featured: true
       },
       {
         title: "Cascade Types in Hibernate",
         url: "Cascade_Type_In_Hibernate.html",
-        date: "2025-06-18",
         tags: ["Hibernate"],
         excerpt: "Hibernate provides several types of cascade options that can be used to manage the relationships between entities.",
         featured: false
@@ -358,68 +406,51 @@
       {
         title: "Containerization Architecture",
         url: "Containerization_Architecture.html",
-        date: "2025-07-08",
-        tags: ["system analysis and design","process"],
+        tags: ["system analysis and design"],
         excerpt: "In modern software development, containerization has emerged as a revolutionary architecture that enables applications to run consistently across environments.",
         featured: false
       },
       {
         title: "Python HTTP Server on Ubuntu",
         url: "Python_server_article.html",
-        date: "2025-03-30",
-        tags: ["linux", "python"],
-        excerpt: "Running a lightweight HTTP server is one of the easiest ways to test, present, or prototype your work on Ubuntu.", 
+        tags: ["linux"],
+        excerpt: "Running a lightweight HTTP server is one of the easiest ways to test, present, or prototype your work on Ubuntu.",
         featured: true
       },
-
       {
         title: "Database per Service",
         url: "Database_per_service.html",
-        date: "2025-04-30",
-        tags: ["Microservices","Database"],
-        excerpt: "Microservices architecture splits a monolith application into a set of modules, each owning a distinct business capability. ", 
+        tags: ["Microservices"],
+        excerpt: "Microservices architecture splits a monolith application into a set of modules, each owning a distinct business capability.",
         featured: false
       },
-     
       {
         title: "SSH Server on Ubuntu",
         url: "ssh_on_ubuntu.html",
-        date: "2025-04-30",
-        tags: ["Linux",],
-        excerpt: "Secure Shell (SSH) is one of the cornerstones of modern Linux administration, cloud computing, and DevOps automation.", 
+        tags: ["Linux"],
+        excerpt: "Secure Shell (SSH) is one of the cornerstones of modern Linux administration, cloud computing, and DevOps automation.",
         featured: false
-      }
-      ,
-
+      },
       {
         title: "Installing Podman on Linux",
         url: "podman_on_linux.html",
-        date: "2025-04-30",
         tags: ["Linux"],
-        excerpt: "Podman is a container tool in Linux, which is increasingly gaining popularity. Podman is secure, simple to use", 
+        excerpt: "Podman is a container tool in Linux, which is increasingly gaining popularity. Podman is secure, simple to use",
         featured: false
       },
-
-       {
+      {
         title: "How to Create and Manage Systemd Services in Linux",
         url: "systemd_linux.html",
-        date: "2025-05-30",
         tags: ["Linux"],
-        excerpt: "This article is a complete, in-depth guide—suitable for beginners, system administrators, DevOps engineers, and developers—on creating, enabling, managing, debugging, and optimizing systemd services.", 
+        excerpt: "This article is a complete, in-depth guide—suitable for beginners, system administrators, DevOps engineers, and developers—on creating, enabling, managing, debugging, and optimizing systemd services.",
         featured: false
       }
-
-
-
-
-
-
     ];
 
     /* -----------------------------
        UI logic (NO external libs)
        ----------------------------- */
-    const grid = document.getElementById('grid');
+    const sectionsRoot = document.getElementById('sections');
     const q = document.getElementById('q');
     const empty = document.getElementById('empty');
     const tagBar = document.getElementById('tagBar');
@@ -428,170 +459,256 @@
 
     let state = {
       query: '',
-      tag: null,
       recent: false,
       featured: false
     };
 
+    // Normalize tags so "Linux" and "linux" become one tag
+    function normalizeTag(t){
+      return String(t || '').trim().toLowerCase();
+    }
+
+    // Pretty tag for heading
+    function prettyTag(t){
+      const n = normalizeTag(t);
+
+      if(n === 'system analysis and design') return 'System Analysis and Design';
+      if(n === 'linux') return 'Linux';
+      if(n === 'microservices') return 'Microservices';
+      if(n === 'hibernate') return 'Hibernate';
+
+      // Title case fallback
+      return n.split(' ').map(w => w ? (w[0].toUpperCase() + w.slice(1)) : '').join(' ');
+    }
+
+    // Format date
     function formatDate(iso){
       try{
         const d = new Date(iso + "T00:00:00");
         return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
       }catch(e){ return iso }
+    } 
+    
+
+    // Build tag -> articles map (based on all tags in the dataset)
+    function buildTagMap(list){
+      const map = new Map(); // normalizedTag -> { rawTags:Set, items:[] }
+
+      list.forEach(a => {
+        (a.tags || []).forEach(raw => {
+          const key = normalizeTag(raw);
+          if(!key) return;
+          if(!map.has(key)){
+            map.set(key, { rawTags: new Set(), items: [] });
+          }
+          map.get(key).rawTags.add(raw);
+          map.get(key).items.push(a);
+        });
+      });
+
+      return map;
     }
 
-    // Build distinct tags
-    const tags = Array.from(new Set(articles.flatMap(a => a.tags || []))).sort();
-    function renderTagBar(){
-      tagBar.innerHTML = '';
-      const allBtn = makeTagButton('All', null, state.tag === null);
-      tagBar.appendChild(allBtn);
-      tags.forEach(t => tagBar.appendChild(makeTagButton(t, t, state.tag === t)));
+    function openLink(url){
+      window.open(url, '_blank', 'noopener,noreferrer');
     }
 
-    function makeTagButton(label, tagValue, active=false){
-      const btn = document.createElement('button');
-      btn.className = 'btn';
-      btn.style.padding = '6px 10px';
-      btn.innerText = label;
-      if(active){
-        btn.style.background = 'linear-gradient(90deg,var(--accent-1),var(--accent-2))';
-        btn.style.color = '#03101a';
-        btn.style.border = 'none';
+    function makeCard(a){
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.tabIndex = 0;
+      card.setAttribute('role','article');
+      card.setAttribute('aria-label', a.title);
+
+      card.addEventListener('click', () => openLink(a.url));
+      card.addEventListener('keypress', (e) => {
+        if(e.key === 'Enter' || e.key === ' ') openLink(a.url);
+      });
+
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+
+      // show all tags as pills
+      (a.tags || []).slice(0, 4).forEach(t => {
+        const tag = document.createElement('div');
+        tag.className = 'tag';
+        tag.innerText = prettyTag(t);
+        meta.appendChild(tag);
+      });
+
+      if(a.featured){
+        const star = document.createElement('div');
+        star.style.marginLeft = 'auto';
+        star.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 17.3L6.16 20l1.02-6L2 9.8l6.12-.9L12 3l3.88 5.9L22 9.8 16.82 14 17.84 20 12 17.3z" stroke="currentColor" stroke-width="0.6" fill="currentColor" /></svg>';
+        meta.appendChild(star);
       }
-      btn.onclick = () => {
-        state.tag = tagValue;
-        render();
-      };
-      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
-      return btn;
+
+      const title = document.createElement('h3');
+      title.className = 'title';
+      title.innerText = a.title;
+
+      const excerpt = document.createElement('p');
+      excerpt.className = 'excerpt';
+      excerpt.innerText = a.excerpt || '';
+
+      const footer = document.createElement('div');
+      footer.className = 'card-footer';
+
+     // const date = document.createElement('div');
+     // date.className = 'date';
+     // date.innerText = formatDate(a.date);
+
+      const actions = document.createElement('div');
+      actions.className = 'actions';
+
+      const openBtn = document.createElement('button');
+      openBtn.className = 'btn primary';
+      openBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3h7v7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 3L10 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 21H3V3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Read';
+      openBtn.onclick = (e) => { e.stopPropagation(); openLink(a.url); };
+
+      actions.appendChild(openBtn);
+      //footer.appendChild(date);
+      footer.appendChild(actions);
+
+      card.appendChild(meta);
+      card.appendChild(title);
+      card.appendChild(excerpt);
+      card.appendChild(footer);
+
+      return card;
     }
 
-    // render cards
+    function makeSection(tagKey, items){
+      const section = document.createElement('section');
+      section.className = 'section';
+      section.id = 'tag-' + tagKey.replace(/[^a-z0-9]+/g,'-');
+
+      const h2 = document.createElement('h2');
+      h2.className = 'section-title';
+      h2.innerHTML = `${prettyTag(tagKey)} <small>(${items.length})</small>`;
+
+      const hr = document.createElement('hr');
+      hr.className = 'section-divider';
+
+      const grid = document.createElement('div');
+      grid.className = 'grid';
+
+      items.forEach(a => grid.appendChild(makeCard(a)));
+
+      section.appendChild(h2);
+      section.appendChild(hr);
+      section.appendChild(grid);
+
+      return section;
+    }
+
+    function renderTagBar(tagKeys){
+      tagBar.innerHTML = '';
+
+      if(!tagKeys.length) return;
+
+      // "All" jump to top
+      const allBtn = document.createElement('button');
+      allBtn.className = 'btn';
+      allBtn.style.padding = '6px 10px';
+      allBtn.innerText = 'Top';
+      allBtn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+      tagBar.appendChild(allBtn);
+
+      tagKeys.forEach(k => {
+        const btn = document.createElement('button');
+        btn.className = 'btn';
+        btn.style.padding = '6px 10px';
+        btn.innerText = prettyTag(k);
+
+        btn.onclick = () => {
+          const id = 'tag-' + k.replace(/[^a-z0-9]+/g,'-');
+          const el = document.getElementById(id);
+          if(el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        tagBar.appendChild(btn);
+      });
+    }
+
     function render(){
       const qLower = (state.query || '').trim().toLowerCase();
+
+      // 1) apply filters to the article list
       let list = articles.slice();
 
-      // filters
       if(state.featured){
         list = list.filter(a => a.featured);
       }
 
-      if(state.tag){
-        list = list.filter(a => (a.tags || []).includes(state.tag));
-      }
-
       if(qLower){
         list = list.filter(a =>
-          a.title.toLowerCase().includes(qLower) ||
-          (a.excerpt||'').toLowerCase().includes(qLower) ||
-          (a.tags||[]).join(' ').toLowerCase().includes(qLower)
+          (a.title || '').toLowerCase().includes(qLower) ||
+          (a.excerpt || '').toLowerCase().includes(qLower) ||
+          (a.tags || []).join(' ').toLowerCase().includes(qLower)
         );
       }
 
-      if(state.recent){
-        list.sort((a,b) => new Date(b.date) - new Date(a.date));
-      } else {
-        // default: featured first, then newest
-        list.sort((a,b) => {
-          if((b.featured|0) - (a.featured|0) !== 0) return (b.featured|0) - (a.featured|0);
-          return new Date(b.date) - new Date(a.date);
-        });
+      // 2) build tag map from filtered list
+      const tagMap = buildTagMap(list);
+
+      // 3) decide tag ordering
+      // You asked: System Analysis and Design, then Linux, then the rest.
+      const preferred = [
+        'linux', 'microservices', 'hibernate',
+        'system analysis and design'
+      ];
+
+
+      let keys = Array.from(tagMap.keys());
+
+      // sort:
+      // - preferred tags first (in given order)
+      // - then alphabetically by pretty tag
+      keys.sort((a,b) => {
+        const ia = preferred.indexOf(a);
+        const ib = preferred.indexOf(b);
+        if(ia !== -1 || ib !== -1){
+          if(ia === -1) return 1;
+          if(ib === -1) return -1;
+          return ia - ib;
+        }
+        return prettyTag(a).localeCompare(prettyTag(b));
+      });
+
+      // 4) within each section, sort items
+      // - if Recent is ON: newest first
+      // - else: featured first, then newest
+      function sortItems(items){
+        const arr = items.slice();
+        if(state.recent){
+          arr.sort((a,b) => new Date(b.date) - new Date(a.date));
+        }else{
+          arr.sort((a,b) => {
+            if((b.featured|0) - (a.featured|0) !== 0) return (b.featured|0) - (a.featured|0);
+            return new Date(b.date) - new Date(a.date);
+          });
+        }
+        return arr;
       }
 
-      grid.innerHTML = '';
+      // 5) render sections
+      sectionsRoot.innerHTML = '';
 
       if(!list.length){
         empty.style.display = 'block';
+        tagBar.innerHTML = '';
         return;
-      } else {
+      }else{
         empty.style.display = 'none';
       }
 
-      list.forEach(a => {
-        const card = document.createElement('article');
-        card.className = 'card';
-        card.tabIndex = 0;
-        card.setAttribute('role','article');
-        card.setAttribute('aria-label', a.title);
+      renderTagBar(keys);
 
-        // click opens link
-        card.addEventListener('click', () => openLink(a.url));
-        card.addEventListener('keypress', (e) => {
-          if(e.key === 'Enter' || e.key === ' ') openLink(a.url);
-        });
-
-        const meta = document.createElement('div');
-        meta.className = 'meta';
-
-        const tag = document.createElement('div');
-        tag.className = 'tag';
-        tag.innerText = (a.tags && a.tags[0]) || '—';
-        meta.appendChild(tag);
-
-        if(a.featured){
-          const star = document.createElement('div');
-          star.style.marginLeft = 'auto';
-          star.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 17.3L6.16 20l1.02-6L2 9.8l6.12-.9L12 3l3.88 5.9L22 9.8 16.82 14 17.84 20 12 17.3z" stroke="currentColor" stroke-width="0.6" fill="currentColor" /></svg>';
-          meta.appendChild(star);
-        }
-
-        const title = document.createElement('h3');
-        title.className = 'title';
-        title.innerText = a.title;
-
-        const excerpt = document.createElement('p');
-        excerpt.className = 'excerpt';
-        excerpt.innerText = a.excerpt || '';
-
-        const footer = document.createElement('div');
-        footer.className = 'card-footer';
-
-        const date = document.createElement('div');
-        date.className = 'date';
-        date.innerText = formatDate(a.date);
-
-        const actions = document.createElement('div');
-        actions.className = 'actions';
-
-        const openBtn = document.createElement('button');
-        openBtn.className = 'btn primary';
-        openBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3h7v7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 3L10 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 21H3V3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Read';
-        openBtn.onclick = (e) => { e.stopPropagation(); openLink(a.url); };
-
-        const copyBtn = document.createElement('button');
-        copyBtn.className = 'btn';
-        copyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 9H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="9" y="3" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Copy';
-        copyBtn.onclick = async (e) => {
-          e.stopPropagation();
-          try {
-            await navigator.clipboard.writeText(a.url);
-            copyBtn.innerHTML = 'Copied ✓';
-            setTimeout(()=> { copyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 9H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="9" y="3" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Copy'; }, 1500);
-          } catch(err) {
-            // fallback
-            window.prompt("Copy link:", a.url);
-          }
-        };
-
-        actions.appendChild(openBtn);
-        actions.appendChild(copyBtn);
-
-        footer.appendChild(date);
-        footer.appendChild(actions);
-
-        card.appendChild(meta);
-        card.appendChild(title);
-        card.appendChild(excerpt);
-        card.appendChild(footer);
-
-        grid.appendChild(card);
+      keys.forEach(k => {
+        const items = sortItems(tagMap.get(k).items);
+        sectionsRoot.appendChild(makeSection(k, items));
       });
-    }
-
-    function openLink(url){
-      // safe fallback: open in new tab
-      window.open(url, '_blank', 'noopener,noreferrer');
     }
 
     // Wire inputs
@@ -617,13 +734,12 @@
     });
 
     // initial
-    //renderTagBar();
     render();
 
     // keyboard accessibility: focus first card when searching result
     q.addEventListener('keydown', (e) => {
       if(e.key === 'Enter'){
-        const first = grid.querySelector('.card');
+        const first = sectionsRoot.querySelector('.card');
         if(first) first.focus();
       }
     });
