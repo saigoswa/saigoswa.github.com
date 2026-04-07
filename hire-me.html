@@ -486,6 +486,13 @@
         tags: ["Linux"],
         excerpt: "The Linux kernel is the heart of the operating system. While default kernel configurations work well for general-purpose use, production environments handling specialized workloads often require fine-tuning to achieve optimal performance.",
         featured: false
+      },
+      {
+        title: "Mastering Advanced Linux System Monitoring with htop and atop",
+        url: "htop.html",
+        tags: ["Linux"],
+        excerpt: "In today's complex computing environments, real-time system monitoring has become critical for maintaining system stability and performance. Among the most powerful advanced monitoring tools available are htop and atop, which offer comprehensive system visibility far beyond what traditional utilities provide.",
+        featured: false
       }
 
 
@@ -523,6 +530,7 @@
       if(n === 'linux') return 'Linux';
       if(n === 'microservices') return 'Microservices';
       if(n === 'hibernate') return 'Hibernate';
+      if(n === 'spring') return 'Spring';
 
       // Title case fallback
       return n.split(' ').map(w => w ? (w[0].toUpperCase() + w.slice(1)) : '').join(' ');
@@ -702,7 +710,7 @@
       // 3) decide tag ordering
       // You asked: System Analysis and Design, then Linux, then the rest.
       const preferred = [
-        'linux', 'microservices', 'hibernate',
+        'linux', 'microservices', 'spring', 'hibernate',
         'system analysis and design'
       ];
 
